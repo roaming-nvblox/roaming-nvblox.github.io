@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="ROAMing: Real-Time Occlusion-Aware 4D Surfel Mapping via Neural Scene Flow. A causal RGB-D mapper that keeps a surfel map consistent through motion and occlusion. CoRL 2026.">
+  <meta property="og:title" content="ROAMing: Real-Time Occlusion-Aware 4D Surfel Mapping via Neural Scene Flow">
+  <meta property="og:description" content="A causal RGB-D mapper that warps every surfel, visible or hidden, with a neural scene-flow field before fusing each frame. CoRL 2026.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ROAMing: Real-Time Occlusion-Aware 4D Surfel Mapping via Neural Scene Flow</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css">
+
+  <style>
+    :root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+    html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+    body { font-family: 'Noto Sans', sans-serif; background: #fff; color: #363636; }
+    .footer .icon-link { font-size: 25px; color: #000; }
+    .link-block a { margin-top: 5px; margin-bottom: 5px; }
+    .publication-title { font-family: 'Google Sans', sans-serif; }
+    .publication-authors { font-family: 'Google Sans', sans-serif; }
+    .publication-authors a { color: hsl(204, 86%, 53%) !important; }
+    .publication-authors a:hover { text-decoration: underline; }
+    .author-block { display: inline-block; }
+    .publication-venue { color: #555; font-size: 1.15rem; margin-top: 0.75rem; }
+    .teaser .hero-body { padding-top: 0; padding-bottom: 3rem; }
+    .teaser { font-family: 'Google Sans', sans-serif; }
+    .publication-banner img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+    .hero.is-light.is-small .hero-body { padding-bottom: 2rem; }
+    .teaser img, .figure img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+    .figure { margin-top: 1.5rem; }
+    .caption { font-size: 0.95rem; color: #555; text-align: left; margin-top: 0.75rem; }
+    .caption b, .caption strong { color: #363636; }
+    .content p { text-align: justify; }
+    .results-table { font-size: 0.95rem; overflow-x: auto; }
+    .results-table table { margin: 0 auto; }
+    .results-table th { white-space: nowrap; }
+    .results-table .ours td, .results-table .ours th { font-weight: 600; color: #2f6b00; background: #f3f9ea; }
+    .results-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .results-table .best { font-weight: 700; }
+    .table-note { font-size: 0.85rem; color: #666; margin-top: 0.5rem; }
+    .pill { display: inline-block; background: #e6f2d5; color: #2f6b00; border-radius: 999px; padding: 0.15rem 0.7rem; font-size: 0.85rem; font-weight: 600; }
+    .key-numbers { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem; margin: 1.5rem 0 0.5rem; }
+    .key-numbers div { border-top: 3px solid #76b900; padding-top: 0.5rem; }
+    .key-numbers .num { font-family: 'Google Sans', sans-serif; font-size: 2rem; line-height: 1.1; color: #2f6b00; }
+    .key-numbers .lbl { font-size: 0.9rem; color: #555; }
+    pre code { white-space: pre; }
+    #BibTeX pre { background: #f5f5f5; }
+    .button.is-soon { opacity: 0.55; cursor: default; }
+    .button.is-soon:hover { opacity: 0.55; }
+    @media (prefers-color-scheme: dark) {
+      /* Keep the template's light look; the paper figures are made for white. */
+    }
+  </style>
+</head>
+<body>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">ROAMing: Real-Time Occlusion-Aware 4D Surfel Mapping via Neural Scene Flow</h1>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="https://openreview.net/profile?id=~David_Recasens1">David Recasens</a><sup>*</sup>,</span>
+            <span class="author-block"><a href="https://openreview.net/profile?id=~David_Tingdahl1">David Tingdahl</a><sup>*</sup>,</span>
+            <span class="author-block"><a href="https://openreview.net/profile?id=~Remo_Steiner1">Remo Steiner</a>,</span>
+            <span class="author-block"><a href="https://openreview.net/profile?id=~Vikram_Ramasamy1">Vikram Ramasamy</a>,</span>
+            <span class="author-block"><a href="https://openreview.net/profile?id=~Alexander_Millane1">Alexander Millane</a>,</span>
+            <span class="author-block"><a href="https://openreview.net/profile?id=~Clemens_Volk1">Clemens Volk</a>,</span>
+            <span class="author-block"><a href="https://openreview.net/profile?id=~Tuur_Stuyck1">Tuur Stuyck</a>,</span>
+            <span class="author-block"><a href="https://openreview.net/profile?id=~Soha_Pouya1">Soha Pouya</a></span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">NVIDIA. Zurich and Santa Clara.</span>
+          </div>
+          <div class="is-size-6 publication-authors">
+            <span class="author-block"><sup>*</sup>Equal contribution</span>
+          </div>
+          <div class="publication-venue">10th Conference on Robot Learning (CoRL 2026), Austin, TX</div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="static/roaming_corl2026.pdf" class="external-link button is-normal is-rounded is-dark" title="Paper PDF">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span><span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark" title="arXiv">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <span class="button is-normal is-rounded is-dark is-soon" title="Code: coming soon">
+                  <span class="icon"><i class="fab fa-github"></i></span><span>Code (coming soon)</span>
+                </span>
+              </span>
+              <span class="link-block">
+                <span class="button is-normal is-rounded is-dark is-soon" title="ArenaPickPlace dataset: coming soon">
+                  <span class="icon"><i class="fas fa-database"></i></span><span>Dataset (coming soon)</span>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TEASER ==================== -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="static/images/teaser.jpg" alt="ROAMing overview: posed RGB-D frames pass through neural scene flow and surfel fusion to produce a surfel map; static fusion leaves a stale ghost arm while ROAMing keeps a coherent map with 3D point tracks.">
+      <p class="caption">
+        <b>ROAMing: warp before fusion for online dynamic mapping.</b>
+        <i>Left:</i> Neural scene flow propagates the map from posed RGB-D frames before depth fusion.
+        <i>Right:</i> Static fusion leaves stale arm geometry; ROAMing maintains a coherent map. Colored curves show 3D point tracks in an <i>ArenaPickPlace</i> test scene.
+      </p>
+      <div class="key-numbers">
+        <div><div class="num">88.3%</div><div class="lbl">completion of currently hidden surfaces on moving objects (DynaGSLAM: 60.7%)</div></div>
+        <div><div class="num">56 ms</div><div class="lbl">per frame for tracking + fusion in the fast configuration (+14 ms RAFT flow)</div></div>
+        <div><div class="num">0 masks</div><div class="lbl">no object segmentation, no future frames: updates from frames <i>t−1</i> and <i>t</i> only</div></div>
+        <div><div class="num">38 scenes</div><div class="lbl">ArenaPickPlace: ray-traced robot interactions with complete surface trajectories</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ABSTRACT ==================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Robots need maps that remain consistent through motion and occlusion. We present ROAMing, a causal RGB-D mapper that maintains an adaptive surfel map without object segmentation. A local-relative transformer refines lifted optical flow and propagates motion to non-visible neighbors; depth fusion adds newly observed surfaces and removes stale geometry. We introduce <i>ArenaPickPlace</i>, a synthetic robot-interaction dataset with complete surface trajectories. Our fast configuration achieves 88.3% completion of currently hidden surfaces on objects that move during the sequence. Evaluation includes zero-shot Sim4D reconstruction and real-world PW-DROID tracking. ROAMing trades some tracking accuracy relative to non-causal trackers for immediate updates. With precomputed optical flow, fast tracking and fusion take 56 ms per <i>ArenaPickPlace</i> frame.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== METHOD ==================== -->
+<section class="section" id="method">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Method</h2>
+    <div class="content">
+      <p>
+        At each time step ROAMing receives a posed RGB-D frame and updates its surfel map in two stages. It first <b>warps</b> every existing surfel, visible or hidden, with a predicted 3D motion, and only then <b>fuses</b> the new depth image. Because the map is moved before association, moving objects do not corrupt data association, and surfaces that pass behind an occluder keep travelling with their neighbours instead of being frozen or discarded.
+      </p>
+    </div>
+    <div class="figure">
+      <img src="static/images/architecture.png" alt="Motion refinement module: source points, visibility mask and visible coarse 3D flow are embedded into tokens, then refined through source attention, a warp by the current flow, warped attention, a fusion MLP and a motion head, looped three times, to produce a refined 3D flow.">
+      <p class="caption">
+        <b>Motion refinement before fusion.</b> Source attention uses a fixed neighborhood graph; warped attention recomputes neighbors as the motion estimate changes. Three refinement iterations predict a residual for every surfel, including those with no visible correspondence.
+      </p>
+    </div>
+    <div class="content" style="margin-top:1.5rem">
+      <p><b>Geometric prior.</b> Forward optical flow between frames <i>t−1</i> and <i>t</i> (RAFT in the fast configuration, WAFT in the accurate one) is lifted to 3D with depth and the camera poses. This supplies motion wherever a valid correspondence exists; hidden surfels and rejected correspondences receive a zero prior, so the prior alone can never move hidden geometry.</p>
+      <p><b>Visibility-aware refinement.</b> A local-relative transformer, in the spirit of Point Transformer and RAFT’s iterative refinement, predicts a residual displacement for every surfel. Tokens encode the prior, its magnitude, visibility and k-nearest-neighbour distance; attention encodes relative offsets rather than absolute positions. Each of three iterations attends over a fixed source graph (k = 16), warps the centres by the current estimate, rebuilds a warped graph (k = 32) and attends again. A hidden surfel remains a token even with a zero prior, so motion propagates through partially observed local structure without any segmentation. Motion below 2 mm is zeroed to suppress drift on static geometry.</p>
+      <p><b>Surfel fusion.</b> Established projective surfel fusion is applied to the propagated map: an information filter combines depth-consistent associations, uncovered measurements spawn new surfels, free-space contradictions prune stale ones, and occluded or out-of-frustum surfels persist.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== DATASET ==================== -->
+<section class="section" id="dataset">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">ArenaPickPlace dataset</h2>
+    <div class="content">
+      <p>
+        Existing 4D reconstruction datasets do not label ground-truth surface points per time step as static or dynamic and visible or hidden, and 3D tracking benchmarks only provide trajectories for pixel-aligned points visible in the first frame. <i>ArenaPickPlace</i> fills that gap: <b>38 tabletop manipulation scenes</b>, each with 10 episode initializations and 10 cameras, captured as 200-frame RGB-D sequences rendered with ray tracing in Isaac Lab Arena. Every sequence ships with depth, optical flow, meshes, 6-DoF poses, and <b>complete surface point and normal trajectories labelled static/dynamic and visible/hidden</b>, including points that become occluded or leave the camera view. We train on all episodes and views of 17 scenes and test on the first episode and camera of the remaining scenes.
+      </p>
+    </div>
+    <div class="figure">
+      <img src="static/images/dataset.jpg" alt="Rows of ArenaPickPlace samples showing RGB, depth, optical flow, visibility labels and motion labels, with novel-view renderings that reveal surfaces hidden from the input camera.">
+      <p class="caption">
+        <b>ArenaPickPlace sequences and annotations.</b> Columns show RGB, depth, optical flow, visibility, and motion labels. The final two columns use novel views to reveal hidden surfaces and distinguish the robot from other moving objects.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== RECONSTRUCTION ==================== -->
+<section class="section" id="reconstruction">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Dynamic reconstruction</h2>
+    <div class="content">
+      <p>
+        We compare with 4DTAM and DynaGSLAM. Accuracy (map → ground truth) and completion (ground truth → map) count the fraction of points within 3 cm of the other set, scoring only ever-observed geometry. <i>Dynamic</i> labels objects that move at any scored frame; <i>hidden</i> includes occluded, back-facing and out-of-view points. The methods differ most on what they do with geometry that stops being observed, so the <b>dynamic-hidden</b> column is where ROAMing’s warp-before-fuse design shows: with 31k versus 30k primitives, fast ROAMing improves dynamic-hidden completion over DynaGSLAM from 60.7% to 88.3%, and tracks six times more dynamic-hidden primitives (6.1% vs 1.0% of the map).
+      </p>
+    </div>
+
+    <div class="results-table">
+      <table class="table is-striped is-hoverable is-narrow">
+        <thead>
+          <tr><th rowspan="2">Method</th><th rowspan="2">Total</th><th colspan="2">Static</th><th colspan="2">Dynamic</th></tr>
+          <tr><th>Visible</th><th>Hidden</th><th>Visible</th><th>Hidden</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>DynaGSLAM <span class="table-note">(30k pts)</span></td><td class="num">96.4 / 60.7</td><td class="num">83.1 / 56.8</td><td class="num">80.7 / 57.5</td><td class="num">98.8 / 99.9</td><td class="num">86.9 / 60.7</td></tr>
+          <tr><td>4DTAM <span class="table-note">(12k pts)</span></td><td class="num">81.4 / 82.9</td><td class="num">89.6 / 86.6</td><td class="num">75.6 / 77.9</td><td class="num">74.7 / 66.2</td><td class="num">56.1 / 55.7</td></tr>
+          <tr class="ours"><td>ROAMing, accurate <span class="table-note">(102k pts)</span></td><td class="num">97.4 / 99.1</td><td class="num">97.5 / 99.6</td><td class="num">95.5 / 98.9</td><td class="num">99.4 / 100.0</td><td class="num">89.7 / 90.2</td></tr>
+          <tr class="ours"><td>ROAMing, fast <span class="table-note">(31k pts)</span></td><td class="num">96.9 / 98.7</td><td class="num">97.6 / 99.3</td><td class="num">95.5 / 98.9</td><td class="num">98.1 / 100.0</td><td class="num">86.0 / 88.3</td></tr>
+        </tbody>
+      </table>
+      <p class="table-note">Accuracy / completion at 3 cm (%, higher is better) on ArenaPickPlace. DynaGSLAM uses oracle masks. Mean map size per frame in parentheses.</p>
+    </div>
+
+    <div class="figure">
+      <img src="static/images/dynamic_hidden.jpg" alt="Novel-view renderings of a tabletop scene: input RGB, then DynaGSLAM, 4DTAM and ROAMing reconstructions with points colored by nearest-surface error from 0 to 5 cm.">
+      <p class="caption">
+        <b>Dynamic-hidden reconstruction</b> on ArenaPickPlace from a novel view. Target points show nearest-surface error (0–5 cm); geometry visible to the input camera supplies ground-truth RGB context.
+      </p>
+    </div>
+    <div class="figure">
+      <img src="static/images/dynamic_hidden_more.jpg" alt="Two more ArenaPickPlace scenes, Black items in bin and Clutter pumpkin, comparing DynaGSLAM, 4DTAM and ROAMing on hidden geometry.">
+      <p class="caption">
+        <b>Additional dynamic-hidden examples.</b> The novel views show how much previously observed moving geometry each method retains once it is hidden from the input camera; colour encodes residual reconstruction error.
+      </p>
+    </div>
+
+    <h3 class="title is-4" style="margin-top:2.5rem">Zero-shot transfer to Sim4D</h3>
+    <div class="content">
+      <p>
+        Sim4D contains animated non-rigid meshes rendered over randomized textures, well outside the training distribution in geometry, motion and appearance. Applied zero-shot and measured by held-out-view depth L1 where both rendered and ground-truth depth are valid, accurate ROAMing and 4DTAM have similar mean error (<b>1.77 vs 1.79 cm</b>) across eight sequences; the fast configuration reaches 2.08 cm, and DynaGSLAM 7.59 cm.
+      </p>
+    </div>
+    <div class="figure">
+      <img src="static/images/sim4d.jpg" alt="Sim4D sequences Curtain, Mercedes and Wave toy: RGB, ground-truth depth, then absolute depth-error maps for DynaGSLAM, 4DTAM and ROAMing on a 0 to 5 cm scale.">
+      <p class="caption">
+        <b>Sim4D qualitative comparison</b> at held-out viewpoints. After RGB and ground-truth depth, the method columns show absolute depth error on a shared 0–5 cm scale (blue is lower).
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TRACKING ==================== -->
+<section class="section" id="tracking">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Causal 3D tracking</h2>
+    <div class="content">
+      <p>
+        The tracking evaluation follows first-frame query identities through the sequence, without fusion, spawning or pruning. Track4World processes the whole video and uses ground-truth scale alignment; TAPIP3D uses 16-frame windows with stride 8, so it sees the future. ROAMing updates from frames <i>t−1</i> and <i>t</i> only and trades a few millimetres of error for immediate, causal estimates. On the real-world PW-DROID clips we restore the robot-arm annotations that the released pseudo ground truth omits.
+      </p>
+    </div>
+    <div class="columns">
+      <div class="column">
+        <div class="results-table">
+          <table class="table is-striped is-narrow">
+            <thead><tr><th>Fixed-query EPE3D (cm, ↓)</th><th>ArenaPickPlace</th><th>PW-DROID</th></tr></thead>
+            <tbody>
+              <tr><td>Track4World (whole video, scaled)</td><td class="num">13.61</td><td class="num">12.21</td></tr>
+              <tr><td>TAPIP3D (16-frame window)</td><td class="num best">0.53</td><td class="num best">0.35</td></tr>
+              <tr class="ours"><td>ROAMing, accurate (causal)</td><td class="num">0.99</td><td class="num">0.54</td></tr>
+              <tr class="ours"><td>ROAMing, fast (causal)</td><td class="num">1.56</td><td class="num">0.72</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="column">
+        <div class="results-table">
+          <table class="table is-striped is-narrow">
+            <thead><tr><th>Runtime</th><th>Arena ms / pair</th><th>Arena GiB</th><th>DROID ms / pair</th><th>DROID GiB</th></tr></thead>
+            <tbody>
+              <tr><td>Track4World</td><td class="num">661<sup>†</sup></td><td class="num">35.6<sup>†</sup></td><td class="num">146</td><td class="num">26.3</td></tr>
+              <tr><td>TAPIP3D</td><td class="num">11,594<sup>†</sup></td><td class="num">42.6<sup>†</sup></td><td class="num">2,924</td><td class="num">11.1</td></tr>
+              <tr><td>4DTAM</td><td class="num">228</td><td class="num">8.6</td><td class="num">—</td><td class="num">—</td></tr>
+              <tr><td>DynaGSLAM</td><td class="num">149</td><td class="num best">1.1</td><td class="num">—</td><td class="num">—</td></tr>
+              <tr class="ours"><td>ROAMing, accurate</td><td class="num">186</td><td class="num">4.8</td><td class="num">254</td><td class="num">10.4</td></tr>
+              <tr class="ours"><td>ROAMing, fast</td><td class="num best">56</td><td class="num">3.1</td><td class="num best">58</td><td class="num best">1.9</td></tr>
+            </tbody>
+          </table>
+          <p class="table-note">RTX 5090; ROAMing numbers include tracking and fusion. Optical flow adds 14 / 10 ms (RAFT, fast) and 312 / 60 ms (WAFT, accurate) on Arena / PW-DROID. <sup>†</sup> L40 GPU for methods exceeding the 5090’s 31.4 GiB. Clip inference is amortized.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="figure">
+      <img src="static/images/tracking_occlusion.jpg" alt="Nine panels: first and last RGB frames with a bottle that is initially occluded, the last frame in 3D, then 3D point tracks for ground truth, Track4World, TAPIP3D, ROAMing geometric prior only, ROAMing with refinement, and ROAMing with fusion.">
+      <p class="caption">
+        <b>Persistent 3D tracking through occlusion.</b> (a)–(b) First and last RGB frames of an ArenaPickPlace test clip; the zoomed regions show the initially occluded bottle. (c) Back-projected frame 97 highlights the disoccluded bottle. (d)–(i) 3D tracks: ground truth, two fixed-query baselines, and our geometric, refined and full tracking-and-fusion variants. Only the full mapper adds tracks on the newly revealed bottle.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== COMPONENTS ==================== -->
+<section class="section" id="components">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">What each component contributes</h2>
+    <div class="figure">
+      <img src="static/images/components.jpg" alt="Three renderings of the same scene with 3D point tracks: geometric prior only leaves hidden points behind, learned refinement carries them along, and fusion adds tracks on the disoccluded bottle.">
+      <p class="caption">
+        <b>Component behavior.</b> Geometric flow leaves hidden points behind (a); refinement propagates them (b); fusion adds tracks on the disoccluded bottle (c).
+      </p>
+    </div>
+    <div class="content" style="margin-top:1.5rem">
+      <p>
+        The geometric prior can only move surfels that are visible in both frames, so points that pass behind the arm are left frozen in place. The refiner gives every surfel a token and lets hidden ones borrow motion from their visible neighbours, which carries them along the arm’s trajectory. Fusion then corrects accumulated drift against new depth, removes surfels that free-space observations contradict, and begins tracking surfaces the moment they are revealed. Trackers that follow only first-frame queries never pick up the bottle at all.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== LIMITATIONS ==================== -->
+<section class="section" id="limitations">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Limitations</h2>
+    <div class="content">
+      <p>
+        Reconstruction is evaluated only in simulation; training and the main benchmark use fixed cameras, leaving camera motion untested. The system depends on external poses and optical flow, and cannot infer arbitrary motion of fully hidden components disconnected from visible local structure. Real-world PW-DROID results evaluate 12-frame tracking clips, not the long-term accuracy and completeness of persistent maps.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BIBTEX ==================== -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{recasens2026roaming,
+  title     = {ROAMing: Real-Time Occlusion-Aware 4D Surfel Mapping via Neural Scene Flow},
+  author    = {Recasens, David and Tingdahl, David and Steiner, Remo and Ramasamy, Vikram and Millane, Alexander and Volk, Clemens and Stuyck, Tuur and Pouya, Soha},
+  booktitle = {Conference on Robot Learning (CoRL)},
+  year      = {2026}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>, which is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+            See also <a href="https://weave-rl.github.io" target="_blank">WeaveRL</a>, our related work on reconstruction inside parallel RL training.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
